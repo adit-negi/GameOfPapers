@@ -130,3 +130,5 @@ dmypy.json
 
 arxivDataset.json
 doc2vec.bin
+baseline_model_experiments/arxivDataset.json
+/baseline_model_experiments/arxivDataset.json
