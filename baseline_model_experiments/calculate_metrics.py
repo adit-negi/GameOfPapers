@@ -1,21 +1,21 @@
 import json
 def calculate_metrics():
-    with open("baseline_model_experiments/bert/sample.json", "r") as f:
+    with open("bert/sample.json", "r") as f:
 
 
         d1 = json.load(f)
 
-    with open("baseline_model_experiments/jaccard/sample.json", "r") as f:
+    with open("jaccard/sample.json", "r") as f:
 
 
         d2 = json.load(f)
 
-    with open("baseline_model_experiments/tf-idf/sample.json", "r") as f:
+    with open("tf-idf/sample.json", "r") as f:
 
 
         d3 = json.load(f)
 
-    with open("baseline_model_experiments/use/use_sample_output.json", "r") as f:
+    with open("use/use_sample_output.json", "r") as f:
 
 
         d4 = json.load(f)
