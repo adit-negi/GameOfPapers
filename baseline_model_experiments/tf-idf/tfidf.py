@@ -2,7 +2,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import sys
 sys.path.insert(1, '/Users/adit/GameOfPapers')
-from data_parser import get_docs , output_data
+from baseline_model_experiments.data_parser import get_docs , output_data
 
 base_document, documents, doc_ids = get_docs()
 

@@ -7,24 +7,13 @@ import json
 import sys
     # caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1, '/Users/adit/GameOfPapers')
-from data_parser import get_thousand_papers 
+from baseline_model_experiments.data_parser import get_docs
 # Opening JSON file
 
   
 # returns JSON object as 
 # a dictionary
-data = get_thousand_papers()
-i = 0
-documents = []
-doc_ids = []
-for doc_id in data:
-	if i==0:
-		base_document = doc_id['title'] +" " + doc_id['abstract']
-		i = i+1
-	else:
-		documents.append(doc_id['title'] +" " + doc_id['abstract'])
-		doc_ids.append((doc_id['id'], doc_id['categories']))
-
+base_document, documents, doc_ids = get_docs()
 print(base_document)
 #nltk.download('punkt')
 def process_bert_similarity():
@@ -46,7 +35,8 @@ def process_bert_similarity():
 		vectors.append(embeddings)
 
 		print("making vector at index:", i)
-
+	print(base_embeddings)
+	print(vectors)
 	scores = cosine_similarity([base_embeddings], vectors).flatten()
 	output = []
 	for i in range(len(scores)):

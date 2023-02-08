@@ -4,7 +4,7 @@ import time
 def get_thousand_papers():
     li = []
     cnt = 0
-    with open("/Users/adit/GameOfPapers/arxivDataset.json", "r") as f:
+    with open("/Users/adit/GameOfPapers/baseline_model_experiments/arxivDataset.json", "r") as f:
             for l in f:
                 if cnt>1000:
                     break
