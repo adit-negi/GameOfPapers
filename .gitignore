@@ -132,3 +132,6 @@ arxivDataset.json
 doc2vec.bin
 baseline_model_experiments/arxivDataset.json
 /baseline_model_experiments/arxivDataset.json
+
+# VS Code files for those working on multiple tools
+*.code-workspace
