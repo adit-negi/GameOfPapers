@@ -8,7 +8,7 @@ import sys
 from torch import nn
     # caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1, '/Users/adit/GameOfPapers')
-from data_parser import get_thousand_papers 
+from baseline_model_experiments.data_parser import get_thousand_papers 
 # Opening JSON file
 from transformers import *
 

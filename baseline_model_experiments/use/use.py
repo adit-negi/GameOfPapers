@@ -4,7 +4,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 import sys
 sys.path.insert(1, '/Users/adit/GameOfPapers')
-from data_parser import get_docs , output_data
+from baseline_model_experiments.data_parser import get_docs , output_data
 
 
 base_document, documents, doc_ids = get_docs()

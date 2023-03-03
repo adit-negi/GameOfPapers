@@ -2,7 +2,7 @@ from gensim.models.doc2vec import Doc2Vec
 from sklearn.metrics.pairwise import cosine_similarity
 import sys
 sys.path.insert(1, '/Users/adit/GameOfPapers')
-from data_parser import get_docs 
+from baseline_model_experiments.data_parser import get_docs 
 import string
 import nltk
 

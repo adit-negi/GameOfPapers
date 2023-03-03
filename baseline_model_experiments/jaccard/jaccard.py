@@ -10,7 +10,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import sys
 sys.path.insert(1, '/Users/adit/GameOfPapers')
-from data_parser import get_docs , output_data
+from baseline_model_experiments.data_parser import get_docs , output_data
 
 base_document, documents, doc_ids = get_docs()
 lemmatizer = WordNetLemmatizer()

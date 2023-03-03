@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk import sent_tokenize
@@ -5,6 +6,11 @@ import nltk
 from sentence_transformers import SentenceTransformer
 import json
 import sys
+from model import get_model
+import torch
+from pytorch_pretrained_bert import BertTokenizer, BertModel, BertForNextSentencePrediction
+from transformers import AutoModel
+
     # caution: path[0] is reserved for script path (or '' in REPL)
 sys.path.insert(1, '/Users/adit/GameOfPapers')
 from baseline_model_experiments.data_parser import get_docs
@@ -18,10 +24,27 @@ print(base_document)
 #nltk.download('punkt')
 def process_bert_similarity():
 	# This will download and load the pretrained model offered by UKPLab.
-	model = SentenceTransformer('bert-base-nli-mean-tokens')
+	pretrained = 'bert-base-nli-mean-tokens'
+	finetuned = '/Users/adit/bert-based-triplet/ckpt/best_model_v6_triplet'
+	
+	#model = SentenceTransformer(pretrained)
+	BERT_CLASS = BertForNextSentencePrediction
+	model =  SentenceTransformer('emilyalsentzer/Bio_ClinicalBERT')
+	state_dict = torch.load(finetuned)
+	print(type(state_dict))
+	
+	d2 = OrderedDict([("0.auto_model."+k[5:], v) for k, v in state_dict.items()])
+	del d2["0.auto_model."+"_joiner.out1.weight"]
+	del d2["0.auto_model."+"_joiner.out1.bias"]
+	del d2["0.auto_model."+"_joiner.out2.weight"]
+	del d2["0.auto_model."+"_joiner.out2.bias"]
 
+	model.load_state_dict(d2)
+	
 	# Although it is not explicitly stated in the official document of sentence transformer, the original BERT is meant for a shorter sentence. We will feed the model by sentences instead of the whole documents.
 	sentences = sent_tokenize(base_document)
+	print(sentences)
+	print('here')	
 	base_embeddings_sentences = model.encode(sentences)
 	base_embeddings = np.mean(np.array(base_embeddings_sentences), axis=0)
 
