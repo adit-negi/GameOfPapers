@@ -29,22 +29,14 @@ def process_bert_similarity():
 	
 	#model = SentenceTransformer(pretrained)
 	BERT_CLASS = BertForNextSentencePrediction
-	model =  SentenceTransformer('emilyalsentzer/Bio_ClinicalBERT')
+	model =  SentenceTransformer(pretrained)
 	state_dict = torch.load(finetuned)
-	print(type(state_dict))
-	
-	d2 = OrderedDict([("0.auto_model."+k[5:], v) for k, v in state_dict.items()])
-	del d2["0.auto_model."+"_joiner.out1.weight"]
-	del d2["0.auto_model."+"_joiner.out1.bias"]
-	del d2["0.auto_model."+"_joiner.out2.weight"]
-	del d2["0.auto_model."+"_joiner.out2.bias"]
 
-	model.load_state_dict(d2)
+
+	model.load_state_dict(state_dict)
 	
 	# Although it is not explicitly stated in the official document of sentence transformer, the original BERT is meant for a shorter sentence. We will feed the model by sentences instead of the whole documents.
 	sentences = sent_tokenize(base_document)
-	print(sentences)
-	print('here')	
 	base_embeddings_sentences = model.encode(sentences)
 	base_embeddings = np.mean(np.array(base_embeddings_sentences), axis=0)
 

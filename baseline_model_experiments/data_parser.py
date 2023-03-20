@@ -14,13 +14,26 @@ def get_thousand_papers():
 
     return li
 
-l = get_thousand_papers()
+def get_30thousand_papers():
+    li = []
+    cnt = 0
+    with open("/Users/adit/GameOfPapers/baseline_model_experiments/arxivDataset.json", "r") as f:
+            for l in f:
+                if cnt>30000:
+                    break
+                d = json.loads(l)
+                li.append(d)
+                cnt += 1
+
+    return li
+
+l = get_30thousand_papers()
 cat_set =set()
 for i in l:
     cats = i['categories'].split(" ")
     for cat in cats:
         cat_set.add(cat)
-with open("sample.json", "w") as outfile:
+with open("30k.json", "w") as outfile:
     outfile.write(json.dumps(l))
 
 
@@ -51,3 +64,5 @@ def output_data(scores, documents, doc_ids):
         d[str(i)] = [j,l,k]
     json_object = json.dumps(d, indent=4)
     return json_object
+
+
