@@ -14,7 +14,7 @@
 python train_single.py --epochs 50 --batch_size 128 --clip 1.0 --lr 1e-3 --embed_dim 300 \
  --freeze False --space_joiner True --dropout 0.2 \
  --loss_fn triplet --max_len 30 \
- --PRE_TRAINED_MODEL_NAME 'emilyalsentzer/Bio_ClinicalBERT' \
+ --PRE_TRAINED_MODEL_NAME 'bert-base-uncased' \
  --model_path './ckpt/best_model_v6_triplet' \
  --train_dir './data/14k_data.csv' \
  --use_aux True --use_aug_data True
