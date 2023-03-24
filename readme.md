@@ -2,7 +2,7 @@
 
 ## Training the model
 
-![Overview](./asset/asset.png)
+![Overview](./bert-based-triplet/asset/finetune.png)
 
 ### Installation
     pip install -r requirement.txt
