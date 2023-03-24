@@ -56,7 +56,8 @@ Easy way to test is to run ```python3 baseline_model_experiments/calculate_metri
 This already runs a bunch of baseline models for you and gives you the result.
 
 ### Compare our model against any pretrained model on huggingface
-Markup : 1. Run any baseline model by navigating to baseline_model_experiments/test_any_huggingface_model/huggingface_pretrained.py
+
+1. Run any baseline model by navigating to baseline_model_experiments/test_any_huggingface_model/huggingface_pretrained.py
             1.1 Add the name of the model you want to test in AutoModel function
         2. Run the file, it will create a sample.json, with embeddings and sorted reccomendations for papers.
         3. Read the sample.json, append it to the baseline_results list in calculate_metrics.py file and run it.
