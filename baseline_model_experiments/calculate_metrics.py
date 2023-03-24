@@ -29,6 +29,15 @@ def calculate_metrics():
     with open("longformer/sample.json", "r") as f:
         d7 = json.load(f)
 
+    # run any baseline model and read it's output json here
+    #update the cnt_model dict in calulate score function
+    # add the read json file to the baseline_outputs list by appending
+    # sudo code below
+    #with open("test_any_huggingface_model/sample.json", "r") as f:
+    #    d8 = json.load(f)
+    #    baseline_outputs.append(d8)
+
+
     with open("sample1.json", "r") as f:
         ground_dataset = json.load(f)
 
@@ -39,7 +48,8 @@ def calculate_metrics():
     tag = ground_dataset[base_doc_id]['categories']
     cnt = 1
     m = []
-    for i in [d1,d2,d3,d4, d5,d6, d7]:
+    baseline_outputs = [d1,d2,d3,d4, d5,d6, d7]
+    for i in baseline_outputs:
 
         c =0
         matches = 0
