@@ -24,7 +24,7 @@ python3 train_single.py --epochs 50 --batch_size 128 --clip 1.0 --lr 1e-3 --embe
  --freeze False --space_joiner True --dropout 0.2 \
  --loss_fn triplet --max_len 30 \
  --PRE_TRAINED_MODEL_NAME 'allenai/scibert_scivocab_uncased' \
- --model_path './ckpt/scibert_model_v6_triplet' \
+ --model_path './ckpt/scibert_model_v6_triplet_2' \
  --train_dir './data/paper_triplet_data.csv' \
  --use_aux True --use_aug_data True
 ```

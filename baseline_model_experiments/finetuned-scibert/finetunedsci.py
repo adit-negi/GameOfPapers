@@ -24,16 +24,24 @@ print(base_document)
 def process_bert_similarity():
     # This will download and load the pretrained model offered by UKPLab.
     pretrained = 'allenai/scibert_scivocab_uncased'
+    finetuned = '/Users/adit/GameOfPapers/bert-based-triplet/ckpt/scibert_model_v6_triplet_2.pt'
 
     #model = SentenceTransformer(pretrained)
     model = AutoModel.from_pretrained(pretrained)
-
+    state_dict = torch.load(finetuned)
+    state_dict = OrderedDict([(k.replace("bert.",""),v) for k, v in state_dict.items()])
+    del state_dict['space_joiner.out1.weight']
+    del state_dict["space_joiner.out1.bias"]
+    del state_dict["space_joiner.out2.weight"] 
+    del state_dict["space_joiner.out2.bias"]
+    model.load_state_dict(state_dict)
     tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
+
 
 
     # Although it is not explicitly stated in the official document of sentence transformer, 
     # the original BERT is meant for a shorter sentence. We will feed the model by sentences instead of the whole documents.
-    tokens = tokenizer([base_document], padding=True, truncation=True, return_tensors="pt")
+    tokens = tokenizer([base_document], padding=True, truncation=True, return_tensors="pt", max_length=500)
 
     with torch.no_grad():
         outputs = model(**tokens)
@@ -44,15 +52,13 @@ def process_bert_similarity():
 
     for i, document in enumerate(documents):
 
+        
         tokens = tokenizer(document, padding=True, truncation=True, return_tensors="pt", max_length=500)
-
         with torch.no_grad():
-            try:
-                outputs = model(**tokens)
-                embeddings_sentences = outputs.last_hidden_state.mean(dim=1)
-            except:
-                print('inside pass')
-                pass
+
+            outputs = model(**tokens)
+            embeddings_sentences = outputs.last_hidden_state.mean(dim=1)
+            
         embeddings = np.mean(np.array(embeddings_sentences), axis=0)
 
         vectors.append(embeddings)

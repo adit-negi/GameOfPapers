@@ -189,9 +189,9 @@ def get_data_df(train_dir,test_dir,config):
     df_train = pd.read_csv(train_dir)
     
     if config.use_aug_data == True:
-      df_train2 = pd.read_csv('./data/triplet_data.csv')
+      df_train2 = pd.read_csv('./data/paper_triplet_data.csv')
       df_train2 = df_train2.drop('Unnamed: 0',axis=1)
       df_train = pd.concat([df_train,df_train2])
 
-    print(df_train.shape, df_test.shape) # question1, question2, is_duplicate
+    print(df_train.shape, df_test.shape) 
     return df_train, df_test

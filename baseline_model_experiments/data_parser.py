@@ -27,14 +27,15 @@ def get_30thousand_papers():
 
     return li
 
-l = get_30thousand_papers()
-cat_set =set()
-for i in l:
-    cats = i['categories'].split(" ")
-    for cat in cats:
-        cat_set.add(cat)
-with open("30k.json", "w") as outfile:
-    outfile.write(json.dumps(l))
+def create_30k_dataset():
+    l = get_30thousand_papers()
+    cat_set =set()
+    for i in l:
+        cats = i['categories'].split(" ")
+        for cat in cats:
+            cat_set.add(cat)
+    with open("30k.json", "w") as outfile:
+        outfile.write(json.dumps(l))
 
 
 def get_docs():
