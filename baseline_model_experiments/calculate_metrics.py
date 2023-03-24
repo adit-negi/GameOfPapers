@@ -20,17 +20,36 @@ def calculate_metrics():
 
         d4 = json.load(f)
 
+
+    with open("scibert/sample.json", "r") as f:
+        d5 = json.load(f) 
+    with open("finetuned-scibert/sample.json", "r") as f:
+        d6 = json.load(f)
+
+    with open("longformer/sample.json", "r") as f:
+        d7 = json.load(f)
+
+    # run any baseline model and read it's output json here
+    #update the cnt_model dict in calulate score function
+    # add the read json file to the baseline_outputs list by appending
+    # sudo code below
+    #with open("test_any_huggingface_model/sample.json", "r") as f:
+    #    d8 = json.load(f)
+    #    baseline_outputs.append(d8)
+
+
     with open("sample1.json", "r") as f:
-        d5 = json.load(f)
+        ground_dataset = json.load(f)
 
     journal_name = ""
     tags = ""
     base_doc_id = "0704.0001"
     journal_name = 'Phys.Rev.D76'
-    tag = d5[base_doc_id]['categories']
+    tag = ground_dataset[base_doc_id]['categories']
     cnt = 1
     m = []
-    for i in [d1,d2,d3,d4]:
+    baseline_outputs = [d1,d2,d3,d4, d5,d6, d7]
+    for i in baseline_outputs:
 
         c =0
         matches = 0
@@ -44,7 +63,7 @@ def calculate_metrics():
                 matches += 1
                 f = True
 
-            if d5[id_]['journal-ref'] and journal_name in d5[id_]['journal-ref'] and not f:
+            if ground_dataset[id_]['journal-ref'] and journal_name in ground_dataset[id_]['journal-ref'] and not f:
                 matches += 1
             c += 1
             if c == 300:
@@ -75,6 +94,7 @@ def calculate_score(m):
     journal_name = 'Phys.Rev.D76'
     tag = d5[base_doc_id]['categories']
     for i in d5:
+        f = False
         if i== base_doc_id: continue
         tags = d5[i]['categories']
         if tag in tags:
@@ -83,8 +103,13 @@ def calculate_score(m):
 
         if d5[i]['journal-ref'] and journal_name in d5[i]['journal-ref'] and not f:
             total_relevant_docs += 1
-
+    cnt = 0
+    cnt_model = {0:"bert", 1:'jaccard', 2:'tf-idf', 3:'use', 4:"scibert", 5:'our-finetune-scibert', 6:"cross-doc-longformer"}
+    print(total_relevant_docs)
     for i in m:
+        print(cnt_model[cnt])
+        print(i)
+        cnt+=1
         print('PRECISION',i/300)
         print('RECALL', i/total_relevant_docs)
         print()

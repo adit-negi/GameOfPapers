@@ -25,15 +25,11 @@ print(base_document)
 def process_bert_similarity():
 	# This will download and load the pretrained model offered by UKPLab.
 	pretrained = 'bert-base-nli-mean-tokens'
-	finetuned = '/Users/adit/bert-based-triplet/ckpt/best_model_v6_triplet'
 	
 	#model = SentenceTransformer(pretrained)
 	BERT_CLASS = BertForNextSentencePrediction
 	model =  SentenceTransformer(pretrained)
-	state_dict = torch.load(finetuned)
 
-
-	model.load_state_dict(state_dict)
 	
 	# Although it is not explicitly stated in the official document of sentence transformer, the original BERT is meant for a shorter sentence. We will feed the model by sentences instead of the whole documents.
 	sentences = sent_tokenize(base_document)

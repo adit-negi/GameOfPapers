@@ -21,14 +21,14 @@ from baseline_model_experiments.data_parser import get_docs
 base_document, documents, doc_ids = get_docs()
 print(base_document)
 #nltk.download('punkt')
-def process_bert_similarity():
+def process_huggingface_similarity():
     # This will download and load the pretrained model offered by UKPLab.
-    pretrained = 'allenai/scibert_scivocab_uncased'
+    pretrained = 'replace with model name available at huggingface'
 
     #model = SentenceTransformer(pretrained)
     model = AutoModel.from_pretrained(pretrained)
 
-    tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
+    tokenizer = AutoTokenizer.from_pretrained(pretrained)
 
 
     # Although it is not explicitly stated in the official document of sentence transformer, 
@@ -44,7 +44,7 @@ def process_bert_similarity():
 
     for i, document in enumerate(documents):
 
-        tokens = tokenizer(document, padding=True, truncation=True, return_tensors="pt", max_length=500)
+        tokens = tokenizer(document, padding=True, truncation=True, return_tensors="pt")
 
         with torch.no_grad():
             try:
@@ -82,6 +82,6 @@ def process_bert_similarity():
             highest_score_index = i
 
     most_similar_document = documents[highest_score_index]
-    print("Most similar document by BERT with the score:", most_similar_document, highest_score)
+    print("Most similar document by longformer with the score:", most_similar_document, highest_score)
 
-process_bert_similarity()
+process_huggingface_similarity()

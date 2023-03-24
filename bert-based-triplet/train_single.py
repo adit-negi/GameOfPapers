@@ -81,8 +81,14 @@ def train_epoch_aux(model, data_loader, loss_fn, loss_cosine, optimizer , device
 def train_epoch(model, data_loader, loss_fn, optimizer , device, config, textwriter):
     model.train()
     losses = []
+    config.print_every= 1
+    for name, param in model.named_parameters():
+        
+        param.requires_grad_(True)
+        print(name, param.requires_grad)
 
     for step, batch in enumerate(data_loader):
+
         # Anchor
         anchor_ids = batch["anchor_ids"].to(device)
         anchor_attention_mask = batch["anchor_attention_mask"].to(device)
@@ -109,21 +115,28 @@ def train_epoch(model, data_loader, loss_fn, optimizer , device, config, textwri
             input_ids=negative_ids,
             attention_mask=negative_attention_mask
         )
-        
+        optimizer.zero_grad()
         loss = loss_fn(anchor_outputs, positive_outputs, negative_outputs)
         losses.append(loss.item())
-        loss.backward()
+        loss.backward(retain_graph=True)
 
         nn.utils.clip_grad_norm_(model.parameters(), max_norm=config.clip)
+        
+            # Inspect gradients before and after optimizer step
+        if step % config.print_every == 0:
+            print(f"[Train] Gradients before optimizer step: {model.parameters()}")
+
 
         optimizer.step()
         scheduler.step()
-        optimizer.zero_grad()
 
         if step % config.print_every == 0:
+            print(f"[Train] Gradients after optimizer step: {model.parameters()}")
             print(f"[Train] Loss at step {step} = {loss}")
+
+
             textwriter.write(f"Loss at step {step} = {loss} \n")
-    
+      
     return np.mean(losses)
 
 def eval_model(model , data_loader, loss_fn, device, n_examples, config):
@@ -180,6 +193,8 @@ if __name__ == '__main__':
 
     # model
     model = get_model(config)
+    print(config)
+    #model = AutoModel.from_pretrained(config.PRE_TRAINED_MODEL_NAME)
     model = model.to(device)
 
     if config.optim == 'adam':
@@ -227,7 +242,7 @@ if __name__ == '__main__':
         print(f'Epoch {epoch + 1}/{config.epochs}')
         print('-' * 10)
         config.textfile.write(f"########## Epoch {epoch} ##########")
-
+        config.use_aux = False
         if config.use_aux:
           train_loss = train_epoch_aux(
               model,
@@ -252,39 +267,42 @@ if __name__ == '__main__':
         
         print(f'Train loss {train_loss}')
 
-        # val_acc, val_loss = eval_model(
-        #     model,
-        #     test_data_loader,
-        #     loss_fn,
-        #     device,
-        #     len(df_test),
-        #     config
-        # )
-        if train_loss<best_loss:
+        val_acc, val_loss = eval_model(
+            model,
+            test_data_loader,
+            loss_fn,
+            device,
+            len(df_test),
+            config
+        )
+        
+
+        top1,top3,top5 = evaluate_model(model,tokenizer,config)
+
+        print(f'Top-1 = {top1} , Top-3 = {top3}, Top-5 = {top5}')
+        print()
+
+        history['train_loss'].append(train_loss)
+        history['val_acc'].append(top1)
+
+        if top1 + top3 + top5 > best_total:
             print('[SAVE] Saving model ... ')
+            
+            best_top1 = top1
+            best_top5 = top5
+            best_total = top1 + top3 + top5
+            best_epoch = epoch
+        elif top1 + top3 + top5 == best_top1 and top1 > best_top1:
+            print('[SAVE] Saving model ... ')
+            
+            best_top1 = top1
+            best_total = top1 + top3 + top5
+            best_epoch = epoch
+        
+
+        print(f'Best epoch {best_epoch}')
+        if train_loss<best_loss:
+            print('[SAVE] Saving model lowest loss')
+
             torch.save(model.state_dict(), config.model_path)
             best_loss = train_loss
-            best_epoch = epoch
-
-        # top1,top3,top5 = evaluate_model(model,tokenizer,config)
-
-        # print(f'Top-1 = {top1} , Top-3 = {top3}, Top-5 = {top5}')
-        # print()
-
-        # history['train_loss'].append(train_loss)
-        # history['val_acc'].append(top1)
-
-        # if top1 + top3 + top5 > best_total:
-        #     print('[SAVE] Saving model ... ')
-        #     torch.save(model.state_dict(), config.model_path)
-        #     best_top1 = top1
-        #     best_top5 = top5
-        #     best_total = top1 + top3 + top5
-        #     best_epoch = epoch
-        # elif top1 + top3 + top5 == best_top1 and top1 > best_top1:
-        #     print('[SAVE] Saving model ... ')
-        #     torch.save(model.state_dict(), config.model_path)
-        #     best_top1 = top1
-        #     best_total = top1 + top3 + top5
-        #     best_epoch = epoch
-        print(f'Best epoch {best_epoch}')
