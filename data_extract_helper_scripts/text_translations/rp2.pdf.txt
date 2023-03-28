@@ -1,0 +1,146 @@
+Personalized Fashion Compatibility Modeling via
+Metapath-guided Heterogeneous Graph Learning
+
+
+Weili Guan
+Monash University
+Melbourne, Australia
+weili.guan@monash.edu
+
+
+Fangkai Jiao
+Shandong University
+Qingdao, China
+jiaofangkai@hotmail.com
+
+
+Xuemeng Song∗
+
+
+Shandong University
+Qingdao, China
+sxmustc@gmail.com
+
+
+Haokun Wen
+Shandong University
+Qingdao, China
+whenhaokun@gmail.com
+
+
+Chung-Hsing Yeh
+Monash University
+Melbourne, Australia
+chunghsing.yeh@monash.edu
+
+
+Xiaojun Chang*
+University of Technology Sydney
+Sydney, Australia
+cxj273@gmail.com
+
+
+ABSTRACT
+
+
+Fashion Compatibility Modeling (FCM) is a new yet challenging
+task, which aims to automatically access the matching degree
+among a set of complementary items. Most of existing methods
+evaluate the fashion compatibility from the common perspective,
+but overlook the user’s personal preference. Inspired by this, a few
+pioneers study the Personalized Fashion Compatibility Modeling
+(PFCM). Despite their significance, these PFCM methods mainly
+concentrate on the user and item entities, as well as their interac-
+tions, but ignore the attribute entities, which contain rich semantics.
+To address this problem, we propose to fully explore the related
+entities and their relations involved in PFCM to boost the PFCM
+performance. This is, however, non-trivial due to the heteroge-
+neous contents of different entities, embeddings for new users, and
+various high-order relations. Towards these ends, we present a
+novel metapath-guided personalized fashion compatibility mod-
+eling, dubbed as MG-PFCM. In particular, we creatively build a
+heterogeneous graph to unify the three types of entities (i.e., users,
+items, and attributes) and their relations (i.e., user-item interac-
+tions, item-item matching relations, and item-attribute association
+relations). Thereafter, we design a multi-modal content-oriented
+user embedding module to learn user representations by inherit-
+ing the contents of their interacted items. Meanwhile, we define
+the user-oriented and item-oriented metapaths, and perform the
+metapath-guided heterogeneous graph learning to enhance the user
+and item embeddings. In addition, we introduce the contrastive
+regularization to improve the model performance. We conduct ex-
+tensive experiments on the real-world benchmark dataset, which
+verifies the superiority of our proposed scheme over several cutting-
+edge baselines. As a byproduct, we have released our source codes
+to benefit other researchers.
+
+
+∗This is the corresponding author.
+
+
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than ACM
+must be honored. Abstracting with credit is permitted. To copy otherwise, or republish,
+to post on servers or to redistribute to lists, requires prior specific permission and/or a
+fee. Request permissions from permissions@acm.org.
+SIGIR ’22, July 11–15, 2022, Madrid, Spain
+© 2022 Association for Computing Machinery.
+ACM ISBN 978-1-4503-8732-3/22/07...$15.00
+https://doi.org/10.1145/3477495.3532038
+
+
+<image: DeviceCMYK, width: 620, height: 367, bpc: 8>
+
+Figure 1: Examples of users’ outfit compositions.
+
+
+CCS CONCEPTS
+
+
+• Information systems → Retrieval tasks and goals.
+
+
+KEYWORDS
+
+
+Personalized Compatibility Modeling, Heterogeneous Graph Neural
+Networks, Metapath-guided Graph Learning
+
+
+ACM Reference Format:
+Weili Guan, Fangkai Jiao, Xuemeng Song, Haokun Wen, Chung-Hsing Yeh,
+and Xiaojun Chang*. 2022. Personalized Fashion Compatibility Modeling
+via Metapath-guided Heterogeneous Graph Learning. In Proceedings of the
+45th International ACM SIGIR Conference on Research and Development in
+Information Retrieval (SIGIR ’22), July 11–15, 2022, Madrid, Spain. ACM, New
+York, NY, USA, 10 pages. https://doi.org/10.1145/3477495.3532038
+
+
+1
+INTRODUCTION
+
+
+Given a set of fashion items, Fashion Compatibility Modeling [21],
+FCM for short, is to estimate their matching degree towards a
+proper outfit. Due to its significance and value in E-commerce like
+fashion item recommendation [17], FCM has gained increasing at-
+tention from both academic and industrial communities. Although
+great success has been achieved by existing efforts [7, 13, 32], they
+mainly focus on the general fashion compatibility modeling, that
+is, exploring the compatibility among fashion items from the com-
+mon perspective while overlooking users’ personal preferences. In
+practice, this is not applicable to the real-world fashion product
+recommendation scenarios.
+
+
+Topic 6: Domain-Specific IR
+SIGIR ’22, July 11–15, 2022, Madrid, Spain
+
+
+482
+
+
+<image: CalRGB, width: 1003, height: 1004, bpc: 8>
+

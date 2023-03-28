@@ -1,0 +1,230 @@
+Hybrid Transformer with Multi-level Fusion for
+Multimodal Knowledge Graph Completion
+
+
+Xiang Chen
+Ningyu Zhang∗
+
+
+Zhejiang University
+AZFT Joint Lab for Knowledge Engine
+Hangzhou Innovation Center
+Hangzhou, Zhejiang, China
+xiang_chen@zju.edu.cn
+zhangningyu@zju.edu.cn
+
+
+Lei Li
+Shumin Deng
+Zhejiang University
+AZFT Joint Lab for Knowledge Engine
+Hangzhou Innovation Center
+Hangzhou, Zhejiang, China
+leili21@zju.edu.cn
+231sm@zju.edu.cn
+
+
+Chuanqi Tan
+Alibaba Group
+Hangzhou, Zhejiang, China
+chuanqi.tcq@alibaba-inc.com
+
+
+Changliang Xu
+State Key Laboratory of Media
+Convergence Production Technology
+and Systems
+Beijing, China
+xu@shuwen.com
+
+
+Fei Huang
+Luo Si
+Alibaba Group
+Hangzhou, Zhejiang, China
+f.huang@alibaba-inc.com
+luo.si@alibaba-inc.com
+
+
+Huajun Chen∗
+
+
+Zhejiang University
+AZFT Joint Lab for Knowledge Engine
+Hangzhou Innovation Center
+Hangzhou, Zhejiang, China
+huajunsir@zju.edu.cn
+
+
+ABSTRACT
+
+
+Multimodal Knowledge Graphs (MKGs), which organize visual-
+text factual knowledge, have recently been successfully applied
+to tasks such as information retrieval, question answering, and
+recommendation system. Since most MKGs are far from complete,
+extensive knowledge graph completion studies have been proposed
+focusing on the multimodal entity, relation extraction and link pre-
+diction. However, different tasks and modalities require changes
+to the model architecture, and not all images/objects are relevant
+to text input, which hinders the applicability to diverse real-world
+scenarios. In this paper, we propose a hybrid transformer with
+multi-level fusion to address those issues. Specifically, we lever-
+age a hybrid transformer architecture with unified input-output
+for diverse multimodal knowledge graph completion tasks. More-
+over, we propose multi-level fusion, which integrates visual and
+text representation via coarse-grained prefix-guided interaction
+and fine-grained correlation-aware fusion modules. We conduct
+extensive experiments to validate that our MKGformer can obtain
+SOTA performance on four datasets of multimodal link prediction,
+multimodal RE, and multimodal NER1.
+
+
+CCS CONCEPTS
+
+
+• Information systems → Information extraction; Multime-
+dia content creation.
+
+
+∗Corresponding author.
+1Code is available in https://github.com/zjunlp/MKGformer.
+
+
+Permission to make digital or hard copies of all or part of this work for personal or
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation
+on the first page. Copyrights for components of this work owned by others than ACM
+must be honored. Abstracting with credit is permitted. To copy otherwise, or republish,
+to post on servers or to redistribute to lists, requires prior specific permission and/or a
+fee. Request permissions from permissions@acm.org.
+SIGIR ’22, July 11–15, 2022, Madrid, Spain
+© 2022 Association for Computing Machinery.
+ACM ISBN 978-1-4503-8732-3/22/07...$15.00
+https://doi.org/10.1145/3477495.3531992
+
+
+KEYWORDS
+
+
+knowledge graph completion; multimodal; relation extraction; named
+entity recognition
+
+
+ACM Reference Format:
+Xiang Chen, Ningyu Zhang, Lei Li, Shumin Deng, Chuanqi Tan, Changliang
+Xu, Fei Huang, Luo Si, and Huajun Chen. 2022. Hybrid Transformer with
+Multi-level Fusion for Multimodal Knowledge Graph Completion. In Pro-
+ceedings of the 45th International ACM SIGIR Conference on Research and De-
+velopment in Information Retrieval (SIGIR ’22), July 11–15, 2022, Madrid, Spain.
+ACM, New York, NY, USA, 12 pages. https://doi.org/10.1145/3477495.3531992
+
+
+1
+INTRODUCTION
+
+
+Superman Returns
+Visual Effect 
+Art Director 
+Film Crew Role
+
+
+<image: DeviceRGB, width: 420, height: 412, bpc: 8>
+
+<image: DeviceRGB, width: 520, height: 516, bpc: 8>
+
+<image: DeviceRGB, width: 520, height: 512, bpc: 8>
+
+<image: DeviceRGB, width: 516, height: 520, bpc: 8>
+
+<image: DeviceRGB, width: 342, height: 336, bpc: 8>
+
+<image: DeviceRGB, width: 390, height: 382, bpc: 8>
+
+✔ 
+✔ 
+✔ 
+✔ 
+✘
+✘
+
+
+Head entities
+Tail entities
+
+
+(a) Examples of Multimodal Link Prediction
+
+
+<image: DeviceRGB, width: 136, height: 232, bpc: 8>
+
+<image: DeviceRGB, width: 204, height: 520, bpc: 8>
+
+<image: DeviceRGB, width: 193, height: 520, bpc: 8>
+
+<image: DeviceRGB, width: 242, height: 504, bpc: 8>
+
+Input Text: [HEAD]Loris Karius is reported to
+feel let down by the signing of [TAIL]Alisson
+and wants to leave Liverpool.
+
+
+Relation Text
+Relation Image
+
+
+✔ 
+✔ 
+✘
+✘
+
+
+Gold Relation: Person/Person/Peer
+
+
+<image: DeviceRGB, width: 520, height: 386, bpc: 8>
+
+Shirt0
+
+
+Person0
+
+
+Person1
+
+
+Shirt1
+
+
+Whole image
+Shirt0
+Shirt1
+Person0 Person1
+
+
+Object
+
+
+Detection
+
+
+(b) Examples of Multimodal Relation Extraction
+
+
+Figure 1: Illustration of examples of multimodal knowledge
+graph facts. Imaged/objects with ✔ around the same en-
+tity have relevant visual features. In contrast, the other im-
+ages/objects with ✗ are irrelevant with the corresponding
+entity.
+
+
+Topic 12: Knowledge Graph
+SIGIR ’22, July 11–15, 2022, Madrid, Spain
+
+
+904
+
+
+<image: CalRGB, width: 1003, height: 1004, bpc: 8>
+
