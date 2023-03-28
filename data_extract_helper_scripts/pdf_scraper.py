@@ -46,7 +46,7 @@ class PdfScraper:
             self.logger.error("Error during configuration: {}".format(e))
             raise e
     
-
+    
     def driver(self):
         try:
             self.logger.info ("PdfScraper::driver")
@@ -93,6 +93,17 @@ class PdfScraper:
             self.logger.error("Error during running the driver: {}".format(e))
     
 
+    """
+    Make translations will save the text translations to a file
+    It will add a blank line between each text block
+
+    Parameters:
+    :param filename: name of the file
+    :ptype filename: string
+    :param text_blocks: list of text blocks, each block is a list of 6 items:
+    :ptype text_blocks: list
+    :return: None
+    """
     def make_text_translations(self, filename, text_blocks):
         try:
             self.logger.info ("PdfScraper::make_text_translations")
@@ -110,7 +121,16 @@ class PdfScraper:
             self.logger.error("Error during making text translations: {}".format(e))
             raise e
     
-
+    
+    """
+    Get title will return the title of the document
+    It is based on the logic that the title will be the first block of text that is not empty
+    
+    Parameters:
+    :param text_blocks: list of text blocks, each block is a list of 6 items:
+    :ptype text_blocks: list
+    :return: title of the document
+    """
     def get_title(self, text_blocks):
         try:
             self.logger.info ("PdfScraper::get_title")
@@ -127,6 +147,16 @@ class PdfScraper:
             raise e
     
 
+    """
+    Get abstract will return the abstract of the document
+    It is based on the logic that we will first find the block of text that contains the word 'abstract'
+    and then the next block of text will be the abstract
+
+    Parameters:
+    :param text_blocks: list of text blocks, each block is a list of 6 items:
+    :ptype text_blocks: list
+    :return: abstract of the document
+    """
     def get_abstract(self, text_blocks):
         try:
             self.logger.info ("PdfScraper::get_abstract")
@@ -148,6 +178,9 @@ class PdfScraper:
             raise e
 
 
+"""
+Parse the command line arguments
+"""
 def parseCmdLineArgs ():
     # instantiate a ArgumentParser object
     parser = argparse.ArgumentParser (description="PDF Scraper")
