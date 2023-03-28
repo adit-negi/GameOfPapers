@@ -5,7 +5,7 @@ Date: 03/27/2022
 """
 
 # import the necessary packages
-import fitz
+import fitz # PyMuPDF :: using pip install PyMuPDF
 import logging
 import argparse
 import os
