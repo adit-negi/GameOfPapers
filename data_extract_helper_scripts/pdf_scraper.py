@@ -140,6 +140,11 @@ class PdfScraper:
                 if not title and block[4]:
                     title += block[4]
             
+            # For ICLR conference
+            if "ICLR" in title:
+                text_blocks.pop(0)
+                title = self.get_title(text_blocks)
+
             return title
 
         except Exception as e:
