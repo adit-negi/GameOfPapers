@@ -1,0 +1,6 @@
+[
+    {
+        "title": "GAUGE EQUIVARIANT MESH CNNS\nANISOTROPIC CONVOLUTIONS ON GEOMETRIC GRAPHS\n",
+        "abstract": "A common approach to de\ufb01ne convolutions on meshes is to interpret them as\na graph and apply graph convolutional networks (GCNs). Such GCNs utilize\nisotropic kernels and are therefore insensitive to the relative orientation of vertices\nand thus to the geometry of the mesh as a whole. We propose Gauge Equivariant\nMesh CNNs which generalize GCNs to apply anisotropic gauge equivariant kernels.\nSince the resulting features carry orientation information, we introduce a geometric\nmessage passing scheme de\ufb01ned by parallel transporting features over mesh edges.\nOur experiments validate the signi\ufb01cantly improved expressivity of the proposed\nmodel over conventional GCNs and other methods.\n "
+    }
+]
