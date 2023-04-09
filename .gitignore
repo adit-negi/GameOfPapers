@@ -135,3 +135,4 @@ baseline_model_experiments/arxivDataset.json
 
 # VS Code files for those working on multiple tools
 *.code-workspace
+gameofpapers.sql
