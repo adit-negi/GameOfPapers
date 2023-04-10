@@ -10,7 +10,7 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import datetime
-
+from io import BytesIO
 
 
 app = Flask(__name__)
@@ -122,6 +122,7 @@ def get_paper_pdf_by_id(id):
 
     paper = ResearchPapers.query.filter_by(id=id).first()
     if paper:
-        return send_file(paper.paper, mimetype='application/pdf', as_attachment=True, download_name=paper.title)
+        pdf_data = BytesIO(paper.paper)
+        return send_file(pdf_data, mimetype='application/pdf', as_attachment=True, download_name=paper.title)
     else:
         return "Paper not found", 404
