@@ -6,6 +6,8 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from project import app
+from project import db
+from project.models import *
 
 BASE_URL = "/v1/api/"
 
@@ -14,10 +16,22 @@ BASE_URL = "/v1/api/"
 def hello_world():
     return "Game of Papers API v1.0 Documentation"
 
-@app.route(BASE_URL + "recommendations")
+@app.route(BASE_URL + "papers")
 def hello_worl():
+
     return jsonify({"message": "Hello, World!"})
 
+def research_papers():
+    papers = ResearchPapers.query.all()
+    result = []
+    for paper in papers:
+        paper_data = {
+            "id": paper.id,
+            "title": paper.title,
+            "author": paper.author,
+            "abstract": paper.abstract
+        }
+        result.append(paper_data)
 
 
 @app.route("/static/<path:filename>")
