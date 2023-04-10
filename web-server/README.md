@@ -20,6 +20,7 @@ Uses the default Flask development server.
     ```
 
     Test it out at [http://localhost:5000](http://localhost:5000). The "web" folder is mounted into the container and your code changes apply automatically.
+1. To seed data into the database download the sql dump from - [http://drive.google.com/sqldata](https://drive.google.com/file/d/12RQX0gLJ2N4SzQ1BqACmjTyM-dwkk555/view?usp=share_link) and run `pg_dump -U hello_flask -h 127.0.0.1 hello_flask_dev > gameofpapers.sql`. When prompted enter the password provided in the docker-compose file.
 
 ### Production
 
