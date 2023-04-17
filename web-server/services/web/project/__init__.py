@@ -152,4 +152,4 @@ def get_paper_pdf_by_id(id):
 
 @app.route("/.well-known/pki-validation/833D11EB3BD89D2ADE22074524DFB8CC.txt")
 def return_text_file():
-    return send_file('web-server/services/web/project/static/833D11EB3BD89D2ADE22074524DFB8CC.txt', mimetype='text/plain')
+    return send_file('833D11EB3BD89D2ADE22074524DFB8CC.txt', mimetype='text/plain')
