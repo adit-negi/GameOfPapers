@@ -9,6 +9,8 @@ from flask import (
 )
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from flask_cors import CORS, cross_origin
+
 import datetime
 from io import BytesIO
 
@@ -16,7 +18,7 @@ from io import BytesIO
 app = Flask(__name__)
 app.config.from_object("project.config.Config")
 db = SQLAlchemy(app)
-
+cors = CORS(app)
 
 
 class User(db.Model):
@@ -70,6 +72,7 @@ def hello_world():
     return "Game of Papers API v1.0 Documentation"
 
 @app.route(BASE_URL + "papers")
+@cross_origin()
 def list_papers():
     start = request.args.get("start")
     end = request.args.get("end")
