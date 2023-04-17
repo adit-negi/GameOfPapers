@@ -31,6 +31,7 @@ services:
       - media_volume:/home/app/web/project/media
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - web
 
