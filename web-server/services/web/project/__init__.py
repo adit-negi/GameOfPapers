@@ -114,7 +114,7 @@ def list_papers():
         result.append(paper_data)
 
     response = jsonify(result)
-    response.headers.add("Access-Control-Allow-Origin", "*")
+
     return response
 
 @app.route(BASE_URL + "papers/<id>")
