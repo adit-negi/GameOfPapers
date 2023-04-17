@@ -149,3 +149,7 @@ def get_paper_pdf_by_id(id):
         return send_file(pdf_data, mimetype='application/pdf', as_attachment=True, download_name=paper.title)
     else:
         return "Paper not found", 404
+
+@app.route("/.well-known/pki-validation/833D11EB3BD89D2ADE22074524DFB8CC.txt")
+def return_text_file():
+    return send_file('web-server/services/web/project/static/833D11EB3BD89D2ADE22074524DFB8CC.txt', mimetype='text/plain')
