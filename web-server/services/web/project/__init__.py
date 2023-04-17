@@ -76,8 +76,18 @@ def list_papers():
         start = int(start)
         end = start+20
     start, end = int(start), int(end)
-    
-    papers = ResearchPapers.query.filter(ResearchPapers.id >= start, ResearchPapers.id <= end).all()
+    conference = request.args.get("conference")
+    title = request.args.get("title")
+    query = ResearchPapers.query
+
+    if title:
+        query = query.filter(ResearchPapers.title.ilike(f'%{title}%'))
+
+    if conference:
+        query = query.filter_by(conference=conference)
+
+    papers = query.offset(start).limit(end - start + 1).all()
+
     result = []
     result = []
     cnt = 0
@@ -89,6 +99,7 @@ def list_papers():
             "author": paper.authors,
             "abstract": paper.abstract,
             "recommendations": paper.recommendations,
+            "conference": paper.conference,
         }
         result.append(paper_data)
 
