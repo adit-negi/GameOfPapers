@@ -16,9 +16,10 @@ from io import BytesIO
 
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object("project.config.Config")
 db = SQLAlchemy(app)
-CORS(app)
+
 
 
 class User(db.Model):
