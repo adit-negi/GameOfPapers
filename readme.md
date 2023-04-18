@@ -12,7 +12,7 @@ model = AutoModel.from_pretrained("adit-negi/recommendor-bert")
 ```
 
 **Demo**
-```demo/use_model.py```
+https://master--rococo-froyo-3cec9b.netlify.app/home
 
 ## Training the model
 
