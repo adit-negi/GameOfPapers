@@ -1,5 +1,19 @@
 # Game Of Papers - A reccomendation system for research papers.
 
+## Use the model using the transformer library
+Easiest way to get started with the model is using it with the transformers library
+
+```
+from transformers import AutoTokenizer, AutoModel
+
+tokenizer = AutoTokenizer.from_pretrained("allenai/scibert_scivocab_uncased")
+
+model = AutoModel.from_pretrained("adit-negi/recommendor-bert")
+```
+
+**Demo**
+```demo/use_model.py```
+
 ## Training the model
 
 ![Overview](./bert-based-triplet/asset/finetune.png)
