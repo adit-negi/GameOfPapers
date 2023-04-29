@@ -12,7 +12,7 @@ model = AutoModel.from_pretrained("adit-negi/recommendor-bert")
 ```
 
 **Demo**
-https://master--rococo-froyo-3cec9b.netlify.app/home
+https://www.gameofpapers.com
 
 ## Training the model
 
