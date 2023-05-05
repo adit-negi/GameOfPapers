@@ -1,4 +1,4 @@
-# Game Of Papers - A reccomendation system for research papers.
+# Game Of Papers - A recommendation system for research papers.
 
 ## Use the model using the transformer library
 Easiest way to get started with the model is using it with the transformers library
